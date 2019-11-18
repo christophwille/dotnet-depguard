@@ -9,6 +9,20 @@ disallowed from use in your projects and go.
 
 Exit code 0 means you are golden, 1 means you have a blacklisted dependency (and it is printed), -1 is an input error.
 
+## Installation
+
+Download and install the [.NET Core 2.1 SDK](https://www.microsoft.com/net/download) or newer. Once installed, run the following command:
+
+```bash
+dotnet tool install --global depguard
+```
+
+If you already have a previous version of **depguard** installed, you can upgrade to the latest version using the following command:
+
+```bash
+dotnet tool update --global depguard
+```
+
 ## Kudos
 
 Built on https://www.nuget.org/packages/DotNetOutdated.Core with also quite a bit of code from the 

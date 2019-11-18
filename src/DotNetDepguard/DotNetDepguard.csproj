@@ -5,8 +5,19 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <ToolCommandName>depguard</ToolCommandName>
     <AssemblyName>depguard</AssemblyName>
+    <Authors>Christoph Wille</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/christophwille/dotnet-depguard/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/christophwille/dotnet-depguard.git</RepositoryUrl>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryType>git</RepositoryType>
+    <Description>Simple blacklist implementation for .NET NuGet package dependencies</Description>
   </PropertyGroup>
 
   <ItemGroup>
