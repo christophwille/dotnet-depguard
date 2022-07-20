@@ -40,7 +40,8 @@ namespace DotNetDepguard
 			{
 				var app = new CommandLineApplication<Program>
 				{
-					ThrowOnUnexpectedArgument = false
+
+					UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect
 				};
 				app.Conventions
 					.UseDefaultConventions()
