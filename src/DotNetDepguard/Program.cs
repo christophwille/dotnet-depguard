@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -13,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 //
-// A lot verbatim or simplified from https://github.com/jerriep/dotnet-outdated/blob/master/src/DotNetOutdated/Program.cs
+// A lot verbatim or simplified from https://github.com/dotnet-outdated/dotnet-outdated/blob/master/src/DotNetOutdated/Program.cs
 //
 namespace DotNetDepguard
 {
@@ -27,15 +26,18 @@ namespace DotNetDepguard
 		public static int Main(string[] args)
 		{
 			using (var services = new ServiceCollection()
-				.AddSingleton<IConsole, PhysicalConsole>()
+				.AddSingleton<IConsole>(PhysicalConsole.Singleton)
+				.AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()))
 				.AddSingleton<IFileSystem, FileSystem>()
 				.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>()
 				.AddSingleton<IProjectAnalysisService, ProjectAnalysisService>()
 				.AddSingleton<IDotNetRunner, DotNetRunner>()
 				.AddSingleton<IDependencyGraphService, DependencyGraphService>()
 				.AddSingleton<IDotNetRestoreService, DotNetRestoreService>()
+				.AddSingleton<IDotNetAddPackageService, DotNetAddPackageService>()
 				.AddSingleton<INuGetPackageInfoService, NuGetPackageInfoService>()
 				.AddSingleton<INuGetPackageResolutionService, NuGetPackageResolutionService>()
+				.AddSingleton<ICentralPackageVersionManagementService, CentralPackageVersionManagementService>()
 				.BuildServiceProvider())
 			{
 				var app = new CommandLineApplication<Program>
@@ -85,8 +87,8 @@ namespace DotNetDepguard
 
 			_blacklistedDependencies = config.Packages.ToDictionary(k => k.ToLowerInvariant());
 
-			string projectPath = _projectDiscoveryService.DiscoverProject(path);
-			var projects = _projectAnalysisService.AnalyzeProject(projectPath, true, 1);
+			var projectPaths = _projectDiscoveryService.DiscoverProjects(path, false);
+			var projects = projectPaths.SelectMany(path => _projectAnalysisService.AnalyzeProject(path, false, false, 1)).ToList();
 
 			var matchedProjects = AnalyzeDependencies(projects, console);
 			if (matchedProjects.Any())
